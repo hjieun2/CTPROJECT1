@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나뭇잎 분류 시스템</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Flexbox CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css">
+    <style>
+        /* 전체 스타일링 */
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f0f2f5;
+        }
+        /* 애니메이션 효과 */
+        .transition-all {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mx-auto px-4 py-8">
+        <!-- 헤더 섹션 -->
+        <header class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800">나뭇잎 분류 시스템</h1>
+            <p class="text-gray-600 mt-2">나뭇잎의 크기를 측정하여 유형을 분류합니다</p>
+        </header>
+
+        <!-- 메인 컨텐츠 -->
+        <main class="bg-white rounded-lg shadow-lg p-6">
+            <!-- 튜토리얼 섹션 -->
+            <div class="mb-8">
+                <h2 class="text-xl font-semibold mb-4">사용 방법</h2>
+                <ol class="list-decimal list-inside space-y-2">
+                    <li>나뭇잎의 가로 길이(넓이)를 측정합니다</li>
+                    <li>나뭇잎의 세로 길이(높이)를 측정합니다</li>
+                    <li>측정값을 입력하고 분류 버튼을 클릭합니다</li>
+                </ol>
+            </div>
+
+            <!-- 입력 폼 -->
+            <form id="leafForm" class="space-y-4">
+                <div>
+                    <label for="width" class="block text-gray-700">가로 길이 (cm)</label>
+                    <input type="number" id="width" step="0.1" required
+                        class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
+                </div>
+                <div>
+                    <label for="height" class="block text-gray-700">세로 길이 (cm)</label>
+                    <input type="number" id="height" step="0.1" required
+                        class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
+                </div>
+                <button type="submit"
+                    class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition-all">
+                    분류하기
+                </button>
+            </form>
+
+            <!-- 결과 표시 영역 -->
+            <div id="result" class="mt-8 hidden">
+                <h3 class="text-lg font-semibold mb-2">분류 결과</h3>
+                <div id="resultText" class="p-4 bg-gray-100 rounded-md"></div>
+            </div>
+
+            <!-- 샘플 데이터 -->
+            <div class="mt-8">
+                <h3 class="text-lg font-semibold mb-2">샘플 데이터</h3>
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="p-2 border">이름</th>
+                            <th class="p-2 border">가로 길이</th>
+                            <th class="p-2 border">세로 길이</th>
+                            <th class="p-2 border">종류</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sampleData"></tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // 샘플 데이터 정의
+        const sampleLeaves = [
+            { name: "샘플 1", width: 5.2, height: 10.1, type: "parallel" },
+            { name: "샘플 2", width: 7.8, height: 8.2, type: "net" },
+            { name: "샘플 3", width: 4.5, height: 12.0, type: "parallel" }
+        ];
+
+        // 샘플 데이터 표시
+        const sampleDataTable = document.getElementById('sampleData');
+        sampleLeaves.forEach(leaf => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td class="p-2 border">${leaf.name}</td>
+                <td class="p-2 border">${leaf.width}</td>
+                <td class="p-2 border">${leaf.height}</td>
+                <td class="p-2 border">${leaf.type}</td>
+            `;
+            sampleDataTable.appendChild(row);
+        });
+
+        // 폼 제출 처리
+        document.getElementById('leafForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const width = parseFloat(document.getElementById('width').value);
+            const height = parseFloat(document.getElementById('height').value);
+            
+            // 간단한 분류 로직 (예시)
+            const ratio = width / height;
+            const type = ratio > 0.6 ? 'net형' : 'parallel형';
+            
+            // 결과 표시
+            const result = document.getElementById('result');
+            const resultText = document.getElementById('resultText');
+            result.classList.remove('hidden');
+            resultText.textContent = `입력된 나뭇잎은 ${type}입니다. (가로/세로 비율: ${ratio.toFixed(2)})`;
+        });
+    </script>
+</body>
+</html>
